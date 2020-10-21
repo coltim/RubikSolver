@@ -159,4 +159,6 @@ fabric.properties
 .idea/**/markdown-navigator.xml
 .idea/**/markdown-navigator/
 
+/target
+
 # End of https://www.gitignore.io/api/eclipse,intellij
