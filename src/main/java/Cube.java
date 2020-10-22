@@ -24,6 +24,12 @@ public class Cube {
         }
     }
 
+    public Cube(Cube cube) {
+        for (int i = 0; i <=53; i++) {
+            this.element[i] = cube.element[i];
+        }
+    }
+
     public char getElement(int index) {
         return element[index];
     }
@@ -47,6 +53,23 @@ public class Cube {
                     break;
                 }
             }
+        }
+        return solved;
+    }
+
+    boolean whiteCrossIsSolved(Cube cube) {
+        boolean solved = true;
+        char center = cube.getElement(40);
+        if (cube.getElement(37) != center ||
+                cube.getElement(39) != center ||
+                cube.getElement(41) != center ||
+                cube.getElement(43) != center) {
+            solved = false;
+        } else if (cube.getElement(1) != 'b' ||
+                cube.getElement(10) != 'o' ||
+                cube.getElement(19) != 'g' ||
+                cube.getElement(28) != 'r') {
+            solved = false;
         }
         return solved;
     }
