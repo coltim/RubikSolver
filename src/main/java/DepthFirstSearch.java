@@ -11,7 +11,7 @@ public class DepthFirstSearch {
     Cube readyCube = new Cube();
     String goal;
     Goals goals = new Goals();
-    private int maxDepth = 5;
+    private int maxDepth = 8;
     private String solution;
     String randomScrambleMoves;
     HashSet<String> solutionsSet = new HashSet<>();
@@ -52,9 +52,14 @@ public class DepthFirstSearch {
     public void testSolver(String moves, String goal){
         //System.out.println("-------");
         //System.out.println(moves);
-        tempCube = new Cube();
+        Cube bune = new Cube(cube);
+        tempCube = bune;
+//        System.out.println("tempcube");
+//        tempCube.print();
+//        System.out.println("cube");
+//        bune.print();
 
-        rotation.movesTranslate(randomScrambleMoves, tempCube);
+       // rotation.movesTranslate(randomScrambleMoves, tempCube);
         //tempCube.print();
 
 
@@ -73,6 +78,30 @@ public class DepthFirstSearch {
                 break;
             case "firstLayerCorner1":
                 goalBoolean = goals.firstLayerCorner1(tempCube);
+                break;
+            case "firstLayerCorner2":
+                goalBoolean = goals.firstLayerCorner2(tempCube);
+                break;
+            case "firstLayerCorner3":
+                goalBoolean = goals.firstLayerCorner3(tempCube);
+                break;
+            case "firstLayerCorner4":
+                goalBoolean = goals.firstLayerCorner4(tempCube);
+                break;
+            case "secondLayerEdge1":
+                goalBoolean = goals.secondLayerEdge1(tempCube);
+                break;
+            case "secondLayerEdge2":
+                goalBoolean = goals.secondLayerEdge2(tempCube);
+                break;
+            case "secondLayerEdge3":
+                goalBoolean = goals.secondLayerEdge3(tempCube);
+                break;
+            case "secondLayerEdge4":
+                goalBoolean = goals.secondLayerEdge4(tempCube);
+                break;
+            case "firstLayer":
+                goalBoolean = goals.firstLayer(tempCube);
                 break;
             case "fullCube":
                 goalBoolean = goals.isSolved(tempCube);

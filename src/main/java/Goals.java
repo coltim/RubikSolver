@@ -34,7 +34,7 @@ public class Goals {
 
     boolean firstLayerCorner1(Cube cube) {
         solved = true;
-        if (cube.getElement(36) != 'w' ||
+        if (!whiteCrossIsSolved(cube) || cube.getElement(36) != 'w' ||
                 cube.getElement(29) != 'r' ||
                 cube.getElement(0) != 'b') {
             solved = false;
@@ -45,7 +45,7 @@ public class Goals {
     boolean firstLayerCorner2(Cube cube) {
         solved = true;
         //boolean solved = true;
-        if (cube.getElement(42) != 'w' ||
+        if (!firstLayerCorner1(cube) || cube.getElement(42) != 'w' ||
                 cube.getElement(2) != 'b' ||
                 cube.getElement(9) != 'o') {
             solved = false;
@@ -56,7 +56,7 @@ public class Goals {
     boolean firstLayerCorner3(Cube cube) {
         solved = true;
         //boolean solved = true;
-        if (cube.getElement(44) != 'w' ||
+        if (!firstLayerCorner2(cube) || cube.getElement(44) != 'w' ||
                 cube.getElement(11) != 'o' ||
                 cube.getElement(18) != 'g') {
             solved = false;
@@ -67,9 +67,21 @@ public class Goals {
     boolean firstLayerCorner4(Cube cube) {
         solved = true;
         //boolean solved = true;
-        if (cube.getElement(38) != 'w' ||
+        if (!firstLayerCorner3(cube) || cube.getElement(38) != 'w' ||
                 cube.getElement(20) != 'g' ||
                 cube.getElement(27) != 'r') {
+            solved = false;
+        }
+        return solved;
+    }
+
+    boolean firstLayer(Cube cube) {
+        solved = true;
+        if (!whiteCrossIsSolved(cube) ||
+                !firstLayerCorner1(cube) ||
+                !firstLayerCorner2(cube) ||
+                !firstLayerCorner3(cube) ||
+                !firstLayerCorner4(cube)) {
             solved = false;
         }
         return solved;
@@ -78,7 +90,7 @@ public class Goals {
     boolean secondLayerEdge1(Cube cube) {
         solved = true;
         //boolean solved = true;
-        if (cube.getElement(32) != 'r' ||
+        if (!firstLayer(cube) || cube.getElement(32) != 'r' ||
                 cube.getElement(3) != 'b') {
             solved = false;
         }
@@ -88,7 +100,7 @@ public class Goals {
     boolean secondLayerEdge2(Cube cube) {
         solved = true;
        // boolean solved = true;
-        if (cube.getElement(5) != 'b' ||
+        if (!secondLayerEdge1(cube) || cube.getElement(5) != 'b' ||
                 cube.getElement(12) != 'o') {
             solved = false;
         }
@@ -98,7 +110,7 @@ public class Goals {
     boolean secondLayerEdge3(Cube cube) {
         solved = true;
        // boolean solved = true;
-        if (cube.getElement(14) != 'o' ||
+        if (!secondLayerEdge2(cube) ||cube.getElement(14) != 'o' ||
                 cube.getElement(21) != 'g') {
             solved = false;
         }
@@ -108,7 +120,7 @@ public class Goals {
     boolean secondLayerEdge4(Cube cube) {
         solved = true;
         //boolean solved = true;
-        if (cube.getElement(23) != 'g' ||
+        if (!secondLayerEdge3(cube) ||cube.getElement(23) != 'g' ||
                 cube.getElement(30) != 'r') {
             solved = false;
         }
