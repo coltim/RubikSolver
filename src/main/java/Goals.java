@@ -127,6 +127,53 @@ public class Goals {
         return solved;
     }
 
+    boolean f2l1(Cube cube) {
+        solved = true;
+        if (!whiteCrossIsSolved(cube) || cube.getElement(36) != 'w' ||
+                cube.getElement(29) != 'r' ||
+                cube.getElement(0) != 'b' ||
+                cube.getElement(32) != 'r' ||
+                cube.getElement(3) != 'b') {
+            solved = false;
+        }
+        return solved;
+    }
+
+    boolean f2l2(Cube cube) {
+        solved = true;
+        if (!whiteCrossIsSolved(cube) || cube.getElement(42) != 'w' ||
+                cube.getElement(2) != 'b' ||
+                cube.getElement(9) != 'o' ||
+                cube.getElement(5) != 'b' ||
+                cube.getElement(12) != 'o') {
+            solved = false;
+        }
+        return solved;
+    }
+    boolean f2l3(Cube cube) {
+        solved = true;
+        if (!whiteCrossIsSolved(cube) || cube.getElement(44) != 'w' ||
+                cube.getElement(11) != 'o' ||
+                cube.getElement(18) != 'g' ||
+                cube.getElement(14) != 'o' ||
+                cube.getElement(21) != 'g') {
+            solved = false;
+        }
+        return solved;
+    }
+    boolean f2l4(Cube cube) {
+        solved = true;
+        if (!whiteCrossIsSolved(cube) || cube.getElement(38) != 'w' ||
+                cube.getElement(20) != 'g' ||
+                cube.getElement(27) != 'r' ||
+                cube.getElement(23) != 'g' ||
+                cube.getElement(30) != 'r') {
+            solved = false;
+        }
+        return solved;
+    }
+
+
 
     boolean firstLayerIsSolved(Cube cube) {
         solved = true;

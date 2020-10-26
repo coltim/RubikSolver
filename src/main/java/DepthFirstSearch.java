@@ -11,7 +11,7 @@ public class DepthFirstSearch {
     Cube readyCube = new Cube();
     String goal;
     Goals goals = new Goals();
-    private int maxDepth = 8;
+    private int maxDepth = 7;
     private String solution;
     String randomScrambleMoves;
     HashSet<String> solutionsSet = new HashSet<>();
@@ -52,8 +52,8 @@ public class DepthFirstSearch {
     public void testSolver(String moves, String goal){
         //System.out.println("-------");
         //System.out.println(moves);
-        Cube bune = new Cube(cube);
-        tempCube = bune;
+        Cube staticCube = new Cube(cube);
+        tempCube = staticCube;
 //        System.out.println("tempcube");
 //        tempCube.print();
 //        System.out.println("cube");
@@ -100,6 +100,18 @@ public class DepthFirstSearch {
             case "secondLayerEdge4":
                 goalBoolean = goals.secondLayerEdge4(tempCube);
                 break;
+            case "f2l1":
+                goalBoolean = goals.f2l1(tempCube);
+                break;
+            case "f2l2":
+                goalBoolean = goals.f2l2(tempCube);
+                break;
+            case "f2l3":
+                goalBoolean = goals.f2l3(tempCube);
+                break;
+            case "f2l4":
+                goalBoolean = goals.f2l4(tempCube);
+                break;
             case "firstLayer":
                 goalBoolean = goals.firstLayer(tempCube);
                 break;
@@ -119,6 +131,7 @@ public class DepthFirstSearch {
     public List<String> shortestSolutions() {
         String shortest = "";
         List<String> solutionList = new ArrayList<String>(solutionsSet);
+        //System.out.println(solutionList);
         String shortestSolution = solutionList.stream()
                 .sorted(Comparator.comparingInt(String::length))
                 .findFirst()

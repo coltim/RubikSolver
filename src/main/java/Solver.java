@@ -1,3 +1,5 @@
+import jdk.nashorn.internal.ir.IfNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,7 +8,7 @@ public class Solver {
     public Solver() {
     }
 
-    public void solver(){
+    public void solver() {
         Cube cube = new Cube();
         List<String> shortestSolutionsList = new ArrayList<>();
         Rotations rotation = new Rotations();
@@ -102,14 +104,29 @@ public class Solver {
         System.out.println("-------");*/
 
         goalSolver(cube, "whiteCross");
-        goalSolver(cube, "firstLayerCorner1");
+       /* goalSolver(cube, "firstLayerCorner1");
         goalSolver(cube, "firstLayerCorner2");
         goalSolver(cube, "firstLayerCorner3");
         goalSolver(cube, "firstLayerCorner4");
         goalSolver(cube, "secondLayerEdge1");
         goalSolver(cube, "secondLayerEdge2");
         goalSolver(cube, "secondLayerEdge3");
-        goalSolver(cube, "secondLayerEdge4");
+        goalSolver(cube, "secondLayerEdge4");*/
+
+        if (goalTester(cube, "f2l1") > 0)
+            goalSolver(cube, "f2l1");
+        shortestF2l(cube);
+        if (goalTester(cube, "f2l2") > 0)
+            goalSolver(cube, "f2l2");
+        shortestF2l(cube);
+        if (goalTester(cube, "f2l3") > 0)
+            goalSolver(cube, "f2l3");
+        shortestF2l(cube);
+        if (goalTester(cube, "f2l4") > 0)
+            goalSolver(cube, "f2l4");
+        shortestF2l(cube);
+
+
     }
 
     public void goalSolver(Cube cube, String goal) {
@@ -132,5 +149,101 @@ public class Solver {
 
         System.out.println("-------");
     }
+
+    public int goalTester(Cube cube, String goal) {
+
+        List<String> shortestSolutionsList = new ArrayList<>();
+        Rotations rotation = new Rotations();
+        DepthFirstSearch dfs;
+        int shortestSol = 0;
+        System.out.println("-------");
+
+        dfs = new DepthFirstSearch("", cube, goal);
+        dfs.search();
+
+        System.out.println("Legrovidebb megoldasok, " + goal + dfs.shortestSolutions());
+
+        if (!dfs.shortestSolutions().isEmpty()) {
+            shortestSol = dfs.shortestSolutions().get(0).length();
+        }
+        System.out.println("-------");
+        return shortestSol;
+
+
+    }
+
+    public void shortestF2l(Cube cube) {
+
+
+        List<String> shortestSolutionsList = new ArrayList<>();
+        Rotations rotation = new Rotations();
+        DepthFirstSearch dfs;
+        System.out.println("-------");
+        Cube tempCube;
+        Cube staticCube = new Cube(cube);
+        tempCube = staticCube;
+        Goals goal = new Goals();
+        List<String> readyList = new ArrayList();
+        String[] goals = {"f2l1", "f2l2", "f2l3", "f2l4"};
+
+        for (String temp : goals) {
+            dfs = new DepthFirstSearch("", tempCube, temp);
+            dfs.search();
+            if (!dfs.shortestSolutions().isEmpty() && readyList.isEmpty()){
+                readyList.add(dfs.shortestSolutions().get(0));
+                System.out.println("1   " +readyList);
+                System.out.println("1-   " +dfs.shortestSolutions());
+
+                if (!readyList.isEmpty() && !dfs.shortestSolutions().isEmpty() &&
+                        readyList.get(0).length() > dfs.shortestSolutions().get(0).length()){
+                    System.out.println("2   " + readyList);
+                    System.out.println("3   " + dfs.shortestSolutions());
+                    readyList.set(0, dfs.shortestSolutions().get(0));
+                }
+            }
+        }
+        System.out.println("ez a lista" + readyList);
+        tempCube.print();
+
+        //System.out.println("Legrovidebb megoldasok, " +  + dfs.shortestSolutions());
+
+        // shortestSolutionsList = dfs.shortestSolutions();
+        //String firstLayer = shortestSolutionsList.get(0);
+    }
+
+    public List f2lSelecter(String goal, Cube cube) {
+        Goals goal1 = new Goals();
+        boolean isReady;
+        String readyF2l = "nincs";
+        List readyList = new ArrayList();
+        switch (goal) {
+            case "f2l1":
+                isReady = goal1.f2l1(cube);
+                if (isReady)
+                    readyList.add("f2l1");
+                break;
+            case "f2l2":
+                isReady = goal1.f2l2(cube);
+                if (isReady)
+                    readyList.add("f2l2");
+                break;
+            case "f2l3":
+                isReady = goal1.f2l3(cube);
+                if (isReady)
+                    readyList.add("f2l3");
+                break;
+            case "f2l4":
+                isReady = goal1.f2l4(cube);
+                if (isReady)
+                    readyList.add("f2l4");
+                break;
+            default:
+                isReady = false;
+                readyF2l = "nincs";
+        }
+        return readyList;
+
+    }
+
 
 }
