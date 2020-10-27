@@ -15,7 +15,7 @@ public class Solver {
         DepthFirstSearch dfs;
         cube.print();
 
-        Scramble scramble = new Scramble(15, cube);
+        Scramble scramble = new Scramble(26, cube);
         scramble.getRandomMoves();
         cube.print();
 
@@ -113,18 +113,20 @@ public class Solver {
         goalSolver(cube, "secondLayerEdge3");
         goalSolver(cube, "secondLayerEdge4");*/
 
-        if (goalTester(cube, "f2l1") > 0)
-            goalSolver(cube, "f2l1");
         shortestF2l(cube);
-        if (goalTester(cube, "f2l2") > 0)
-            goalSolver(cube, "f2l2");
-        shortestF2l(cube);
-        if (goalTester(cube, "f2l3") > 0)
-            goalSolver(cube, "f2l3");
-        shortestF2l(cube);
-        if (goalTester(cube, "f2l4") > 0)
-            goalSolver(cube, "f2l4");
-        shortestF2l(cube);
+        readyF2l(cube);
+//        if (goalTester(cube, "f2l1") > 0)
+        goalTester(cube, "f2l1");
+//        shortestF2l(cube);
+//        if (goalTester(cube, "f2l2") > 0)
+        goalTester(cube, "f2l2");
+//        shortestF2l(cube);
+//        if (goalTester(cube, "f2l3") > 0)
+        goalTester(cube, "f2l3");
+//        shortestF2l(cube);
+//        if (goalTester(cube, "f2l4") > 0)
+        goalTester(cube, "f2l4");
+//        shortestF2l(cube);
 
 
     }
@@ -172,6 +174,19 @@ public class Solver {
 
     }
 
+    public void readyF2l(Cube cube) {
+        Goals goal = new Goals();
+        List<String> solvedGoals = new ArrayList();
+        String[] goals = {"f2l1", "f2l2", "f2l3", "f2l4"};
+        for (String temp : goals) {
+            System.out.println(f2lSelecter(temp, cube));
+            if (!f2lSelecter(temp, cube).isEmpty())
+                solvedGoals.add(f2lSelecter(temp, cube).get(0).toString());
+
+        }
+        System.out.println("solvedgoals--" + solvedGoals);
+    }
+
     public void shortestF2l(Cube cube) {
 
 
@@ -179,6 +194,7 @@ public class Solver {
         Rotations rotation = new Rotations();
         DepthFirstSearch dfs;
         System.out.println("-------");
+        String shortestGoal = null;
         Cube tempCube;
         Cube staticCube = new Cube(cube);
         tempCube = staticCube;
@@ -189,20 +205,26 @@ public class Solver {
         for (String temp : goals) {
             dfs = new DepthFirstSearch("", tempCube, temp);
             dfs.search();
-            if (!dfs.shortestSolutions().isEmpty() && readyList.isEmpty()){
-                readyList.add(dfs.shortestSolutions().get(0));
-                System.out.println("1   " +readyList);
-                System.out.println("1-   " +dfs.shortestSolutions());
-
-                if (!readyList.isEmpty() && !dfs.shortestSolutions().isEmpty() &&
-                        readyList.get(0).length() > dfs.shortestSolutions().get(0).length()){
-                    System.out.println("2   " + readyList);
-                    System.out.println("3   " + dfs.shortestSolutions());
-                    readyList.set(0, dfs.shortestSolutions().get(0));
+            if (!dfs.shortestSolutions().isEmpty()) {
+                if (dfs.shortestSolutions().get(0) != "") {
+                    if (readyList.isEmpty())
+                    readyList.add(dfs.shortestSolutions().get(0));
+                    shortestGoal = temp;
+                    //System.out.println("1   " + readyList + "   " + readyList.isEmpty());
+                    //System.out.println("1-   " + dfs.shortestSolutions());
+                    if (!readyList.isEmpty() && !dfs.shortestSolutions().isEmpty() &&
+                            readyList.get(0).length() > dfs.shortestSolutions().get(0).length()) {
+                        //System.out.println("2   " + readyList);
+                        //System.out.println("3   " + dfs.shortestSolutions());
+                        readyList.clear();
+                        readyList.add(dfs.shortestSolutions().get(0));
+                        shortestGoal = temp;
+                    }
                 }
             }
         }
         System.out.println("ez a lista" + readyList);
+        System.out.println(shortestGoal);
         tempCube.print();
 
         //System.out.println("Legrovidebb megoldasok, " +  + dfs.shortestSolutions());
