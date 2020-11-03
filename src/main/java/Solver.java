@@ -15,7 +15,7 @@ public class Solver {
         DepthFirstSearch dfs;
         cube.print();
 
-        Scramble scramble = new Scramble(26, cube);
+        Scramble scramble = new Scramble(27, cube);
         scramble.getRandomMoves();
         cube.print();
 
@@ -115,17 +115,68 @@ public class Solver {
 
         shortestF2l(cube);
         readyF2l(cube);
+        goalSolver(cube, shortestF2l(cube), readyF2l(cube));
+        cube.print();
+        System.out.println("masodik************************************************************");
+        System.out.println("masodik************************************************************");
+        System.out.println("masodik************************************************************");
+        System.out.println(readyF2l(cube));
+        goalSolver(cube, shortestF2l(cube), readyF2l(cube));
+        cube.print();
+        System.out.println("harom************************************************************");
+        System.out.println("harom************************************************************");
+        System.out.println("harom************************************************************");
+        System.out.println(readyF2l(cube));
+        goalSolver(cube, shortestF2l(cube), readyF2l(cube));
+        cube.print();
+        System.out.println("negy************************************************************");
+        System.out.println("negy************************************************************");
+        System.out.println("negy************************************************************");
+        System.out.println(readyF2l(cube));
+        goalSolver(cube, shortestF2l(cube), readyF2l(cube));
+        cube.print();
+
+        //goalSolver(cube, shortestF2l(cube));
+        //goalSolver(cube, shortestF2l(cube));
+        //goalSolver(cube, shortestF2l(cube));
+
+
+        /*System.out.println("legrovidebb f2l1//////////////");
+        cube.print();
+        //String temp = shortestSolutionsList.get(0);
+        rotation.movesTranslate(shortestF2l(cube), cube);
+        cube.print();
+        System.out.println("legrovidebb f2l 1vege////////////");
+        readyF2l(cube);System.out.println("legrovidebb f2l2//////////////");
+        cube.print();
+        //String temp = shortestSolutionsList.get(0);
+        rotation.movesTranslate(shortestF2l(cube), cube);
+        cube.print();
+        System.out.println("legrovidebb f2l 2vege////////////");
+        readyF2l(cube);System.out.println("legrovidebb f2l3//////////////");
+        cube.print();
+        //String temp = shortestSolutionsList.get(0);
+        rotation.movesTranslate(shortestF2l(cube), cube);
+        cube.print();
+        System.out.println("legrovidebb f2l 3vege////////////");
+        readyF2l(cube);System.out.println("legrovidebb f2l4//////////////");
+        cube.print();
+        //String temp = shortestSolutionsList.get(0);
+        rotation.movesTranslate(shortestF2l(cube), cube);
+        cube.print();
+        System.out.println("legrovidebb f2l 4vege////////////");
+        readyF2l(cube);*/
 //        if (goalTester(cube, "f2l1") > 0)
-        goalTester(cube, "f2l1");
+        //goalTester(cube, "f2l1");
 //        shortestF2l(cube);
 //        if (goalTester(cube, "f2l2") > 0)
-        goalTester(cube, "f2l2");
+        //goalTester(cube, "f2l2");
 //        shortestF2l(cube);
 //        if (goalTester(cube, "f2l3") > 0)
-        goalTester(cube, "f2l3");
+        //goalTester(cube, "f2l3");
 //        shortestF2l(cube);
 //        if (goalTester(cube, "f2l4") > 0)
-        goalTester(cube, "f2l4");
+        //goalTester(cube, "f2l4");
 //        shortestF2l(cube);
 
 
@@ -139,6 +190,26 @@ public class Solver {
         System.out.println("-------");
 
         dfs = new DepthFirstSearch("", cube, goal);
+        dfs.search();
+
+        System.out.println("Legrovidebb megoldasok, " + goal + dfs.shortestSolutions());
+
+        shortestSolutionsList = dfs.shortestSolutions();
+        String firstLayer = shortestSolutionsList.get(0);
+
+        rotation.movesTranslate(firstLayer, cube);
+        cube.print();
+
+        System.out.println("-------");
+    }
+    public void goalSolver(Cube cube, String goal, List solvedGoals) {
+
+        List<String> shortestSolutionsList = new ArrayList<>();
+        Rotations rotation = new Rotations();
+        DepthFirstSearch dfs;
+        System.out.println("-------");
+
+        dfs = new DepthFirstSearch("", cube, goal, solvedGoals);
         dfs.search();
 
         System.out.println("Legrovidebb megoldasok, " + goal + dfs.shortestSolutions());
@@ -174,21 +245,23 @@ public class Solver {
 
     }
 
-    public void readyF2l(Cube cube) {
+    //megnezi melyik blokk van mar kesz.
+    public List<String> readyF2l(Cube cube) {
         Goals goal = new Goals();
         List<String> solvedGoals = new ArrayList();
         String[] goals = {"f2l1", "f2l2", "f2l3", "f2l4"};
         for (String temp : goals) {
-            System.out.println(f2lSelecter(temp, cube));
+            //System.out.println(f2lSelecter(temp, cube));
             if (!f2lSelecter(temp, cube).isEmpty())
                 solvedGoals.add(f2lSelecter(temp, cube).get(0).toString());
 
         }
-        System.out.println("solvedgoals--" + solvedGoals);
+        //System.out.println("solvedgoals--" + solvedGoals);
+    return solvedGoals;
     }
 
-    public void shortestF2l(Cube cube) {
 
+    public String shortestF2l(Cube cube) {
 
         List<String> shortestSolutionsList = new ArrayList<>();
         Rotations rotation = new Rotations();
@@ -200,16 +273,17 @@ public class Solver {
         tempCube = staticCube;
         Goals goal = new Goals();
         List<String> readyList = new ArrayList();
-        String[] goals = {"f2l1", "f2l2", "f2l3", "f2l4"};
+        String[] goals = {"f2l1GoalUpdate", "f2l2GoalUpdate", "f2l3GoalUpdate", "f2l4GoalUpdate"};
 
         for (String temp : goals) {
-            dfs = new DepthFirstSearch("", tempCube, temp);
+            dfs = new DepthFirstSearch("", tempCube, temp, readyF2l(cube));
             dfs.search();
             if (!dfs.shortestSolutions().isEmpty()) {
                 if (dfs.shortestSolutions().get(0) != "") {
-                    if (readyList.isEmpty())
-                    readyList.add(dfs.shortestSolutions().get(0));
-                    shortestGoal = temp;
+                    if (readyList.isEmpty()) {
+                        readyList.add(dfs.shortestSolutions().get(0));
+                        shortestGoal = temp;
+                    }
                     //System.out.println("1   " + readyList + "   " + readyList.isEmpty());
                     //System.out.println("1-   " + dfs.shortestSolutions());
                     if (!readyList.isEmpty() && !dfs.shortestSolutions().isEmpty() &&
@@ -225,12 +299,14 @@ public class Solver {
         }
         System.out.println("ez a lista" + readyList);
         System.out.println(shortestGoal);
-        tempCube.print();
+        //tempCube.print();
 
         //System.out.println("Legrovidebb megoldasok, " +  + dfs.shortestSolutions());
 
         // shortestSolutionsList = dfs.shortestSolutions();
         //String firstLayer = shortestSolutionsList.get(0);
+
+        return shortestGoal;
     }
 
     public List f2lSelecter(String goal, Cube cube) {

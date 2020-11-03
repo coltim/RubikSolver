@@ -101,7 +101,7 @@ public class Goals {
 
     boolean secondLayerEdge2(Cube cube) {
         solved = true;
-       // boolean solved = true;
+        // boolean solved = true;
         if (!secondLayerEdge1(cube) || cube.getElement(5) != 'b' ||
                 cube.getElement(12) != 'o') {
             solved = false;
@@ -111,8 +111,8 @@ public class Goals {
 
     boolean secondLayerEdge3(Cube cube) {
         solved = true;
-       // boolean solved = true;
-        if (!secondLayerEdge2(cube) ||cube.getElement(14) != 'o' ||
+        // boolean solved = true;
+        if (!secondLayerEdge2(cube) || cube.getElement(14) != 'o' ||
                 cube.getElement(21) != 'g') {
             solved = false;
         }
@@ -122,29 +122,55 @@ public class Goals {
     boolean secondLayerEdge4(Cube cube) {
         solved = true;
         //boolean solved = true;
-        if (!secondLayerEdge3(cube) ||cube.getElement(23) != 'g' ||
+        if (!secondLayerEdge3(cube) || cube.getElement(23) != 'g' ||
                 cube.getElement(30) != 'r') {
             solved = false;
         }
         return solved;
     }
 
-    boolean f2l(Cube cube, List<String> solvedF2lList){
-        solved = true;
-        for (String temp : solvedF2lList) {
-            if (temp == "f2l1"){
-                f2l1(cube);
-            }else if (temp == "f2l2"){
+    boolean f2l(Cube cube, List<String> solvedF2lList) {
+
+
+        if (f2l1(cube) == true){
+            f2l1(cube);
+            if (f2l2(cube) == true){
                 f2l2(cube);
-            }else if (temp == "f2l3"){
-                f2l3(cube);
-            }else if (temp == "f2l4"){
-                f2l4(cube);
+                if (f2l3(cube) == true){
+                    f2l3(cube);
+                    if (f2l4(cube) == true){
+                        f2l4(cube);
+
+                    }
+                }
             }
         }
 
 
+
+        solved = true;
+        boolean fullsolveed;
+        boolean f2l1;
+        boolean f2l2;
+        boolean f2l3;
+        boolean f2l4;
+        //
+        // while(fullsolveed == false){}
+        for (String temp : solvedF2lList) {
+            if (temp == "f2l1") {
+                f2l1 = f2l1(cube);
+            } else if (temp == "f2l2") {
+                f2l2 = f2l2(cube);
+            } else if (temp == "f2l3") {
+                f2l3 = f2l3(cube);
+            } else if (temp == "f2l4") {
+                f2l4 = f2l4(cube);
+            }
+
+        }
+        //
         return solved;
+
     }
 
     boolean f2l1(Cube cube) {
@@ -158,6 +184,101 @@ public class Goals {
         }
         return solved;
     }
+    boolean f2l1GoalUpdate(Cube cube, List<String> solvedF2lList){
+        solved = false;
+        boolean f1 = true;
+        boolean f2 = true;
+        boolean f3 = true;
+        boolean f4 = true;
+
+            for (String temp : solvedF2lList) {
+                if (temp == "f2l1") {
+                    f1 = f2l1(cube);
+                } else if (temp == "f2l2") {
+                    f2 = f2l2(cube);
+                } else if (temp == "f2l3") {
+                    f3 = f2l3(cube);
+                } else if (temp == "f2l4") {
+                    f4 = f2l4(cube);
+                }
+            }
+            solved = f2l1(cube);
+
+
+        return f1 && f2 && f3 && f4 && solved;
+    }
+
+    boolean f2l2GoalUpdate(Cube cube, List<String> solvedF2lList){
+        solved = false;
+        boolean f1 = true;
+        boolean f2 = true;
+        boolean f3 = true;
+        boolean f4 = true;
+
+            for (String temp : solvedF2lList) {
+                if (temp == "f2l1") {
+                    f1 = f2l1(cube);
+                } else if (temp == "f2l2") {
+                    f2 = f2l2(cube);
+                } else if (temp == "f2l3") {
+                    f3 = f2l3(cube);
+                } else if (temp == "f2l4") {
+                    f4 = f2l4(cube);
+                }
+            }
+            solved = f2l2(cube);
+
+
+        return f1 && f2 && f3 && f4 && solved;
+    }
+    boolean f2l3GoalUpdate(Cube cube, List<String> solvedF2lList){
+        solved = true;
+        boolean f1 = true;
+        boolean f2 = true;
+        boolean f3 = true;
+        boolean f4 = true;
+
+            for (String temp : solvedF2lList) {
+                if (temp == "f2l1") {
+                    f1 = f2l1(cube);
+                } else if (temp == "f2l2") {
+                    f2 = f2l2(cube);
+                } else if (temp == "f2l3") {
+                    f3 = f2l3(cube);
+                } else if (temp == "f2l4") {
+                    f4 = f2l4(cube);
+                }
+            }
+            solved = f2l3(cube);
+
+
+        return f1 && f2 && f3 && f4 && solved;
+
+    }
+    boolean f2l4GoalUpdate(Cube cube, List<String> solvedF2lList){
+        solved = false;
+        boolean f1 = true;
+        boolean f2 = true;
+        boolean f3 = true;
+        boolean f4 = true;
+
+            for (String temp : solvedF2lList) {
+                if (temp == "f2l1") {
+                    f1 = f2l1(cube);
+                } else if (temp == "f2l2") {
+                    f2 = f2l2(cube);
+                } else if (temp == "f2l3") {
+                    f3 = f2l3(cube);
+                } else if (temp == "f2l4") {
+                    f4 = f2l4(cube);
+                }
+            }
+            solved = f2l4(cube);
+
+
+
+        return f1 && f2 && f3 && f4 && solved;
+    }
 
     boolean f2l2(Cube cube) {
         solved = true;
@@ -170,6 +291,7 @@ public class Goals {
         }
         return solved;
     }
+
     boolean f2l3(Cube cube) {
         solved = true;
         if (!whiteCrossIsSolved(cube) || cube.getElement(44) != 'w' ||
@@ -181,6 +303,7 @@ public class Goals {
         }
         return solved;
     }
+
     boolean f2l4(Cube cube) {
         solved = true;
         if (!whiteCrossIsSolved(cube) || cube.getElement(38) != 'w' ||
@@ -192,7 +315,6 @@ public class Goals {
         }
         return solved;
     }
-
 
 
     boolean firstLayerIsSolved(Cube cube) {

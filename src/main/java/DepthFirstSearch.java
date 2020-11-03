@@ -11,11 +11,12 @@ public class DepthFirstSearch {
     Cube readyCube = new Cube();
     String goal;
     Goals goals = new Goals();
-    private int maxDepth = 8;
+    private int maxDepth = 7;
     private String solution;
     String randomScrambleMoves;
     HashSet<String> solutionsSet = new HashSet<>();
     List<String> shortestSolutionsList = new ArrayList<>();
+    List<String> solvedF2l = new ArrayList<>();
 
 
 
@@ -24,7 +25,14 @@ public class DepthFirstSearch {
         this.solution = "None";
         this.cube = cube;
         this.goal = goal;
+    }
 
+    public DepthFirstSearch(String randomScrambleMoves, Cube cube, String goal, List solvedF2l) {
+        this.randomScrambleMoves = randomScrambleMoves;
+        this.solution = "None";
+        this.cube = cube;
+        this.goal = goal;
+        this.solvedF2l = solvedF2l;
     }
 
 
@@ -41,8 +49,6 @@ public class DepthFirstSearch {
             }
 
         }
-
-
 
 
         testSolver(moves, goal);
@@ -114,6 +120,21 @@ public class DepthFirstSearch {
                 break;
             case "firstLayer":
                 goalBoolean = goals.firstLayer(tempCube);
+                break;
+            case "f2l":
+                goalBoolean = goals.f2l(tempCube, solvedF2l);
+                break;
+            case "f2l1GoalUpdate":
+                goalBoolean = goals.f2l1GoalUpdate(tempCube, solvedF2l);
+                break;
+            case "f2l2GoalUpdate":
+                goalBoolean = goals.f2l2GoalUpdate(tempCube, solvedF2l);
+                break;
+            case "f2l3GoalUpdate":
+                goalBoolean = goals.f2l3GoalUpdate(tempCube, solvedF2l);
+                break;
+            case "f2l4GoalUpdate":
+                goalBoolean = goals.f2l4GoalUpdate(tempCube, solvedF2l);
                 break;
             case "fullCube":
                 goalBoolean = goals.isSolved(tempCube);
