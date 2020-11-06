@@ -11,13 +11,12 @@ public class DepthFirstSearch {
     Cube readyCube = new Cube();
     String goal;
     Goals goals = new Goals();
-    private int maxDepth = 7;
+    private int maxDepth = 11;
     private String solution;
     String randomScrambleMoves;
     HashSet<String> solutionsSet = new HashSet<>();
     List<String> shortestSolutionsList = new ArrayList<>();
     List<String> solvedF2l = new ArrayList<>();
-
 
 
     public DepthFirstSearch(String randomScrambleMoves, Cube cube, String goal) {
@@ -37,25 +36,43 @@ public class DepthFirstSearch {
 
 
     public void search() {
-        search(0, "");
-    }
-
-    private void search(int currentDepth, String moves) {
-
-        char possibleMoves[] = {'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'F', 'f', 'B', 'b'};
-        for (char c : possibleMoves) {
-            if (currentDepth < maxDepth) {
-                search(currentDepth + 1, moves.concat(Character.toString(c)));
+        for (int i =0; i<maxDepth; i++){
+            String temp = search(i, "");
+            if (temp != null){
+                System.out.println("ez a temp--- " + temp + "  - " + i);
+                break;
             }
 
         }
 
-
-        testSolver(moves, goal);
-
     }
 
-    public void testSolver(String moves, String goal){
+    private String search(int currentDepth, String moves) {
+
+        char possibleMoves[] = {'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'F', 'f', 'B', 'b'};
+        if (currentDepth > 0) {
+            for (char c : possibleMoves) {
+                String temp = search(currentDepth - 1, moves.concat(Character.toString(c)));
+                if (temp != null){
+                    return temp;
+                }
+            }
+        } else {
+            if(testSolver(moves, goal)){
+                System.out.println("belulrol jon " + moves);
+
+                return moves;
+            }else {
+                //System.out.println("nincs megoldas");
+                return null;
+            }
+
+        }
+
+        return null;
+    }
+
+    public boolean testSolver(String moves, String goal) {
         //System.out.println("-------");
         //System.out.println(moves);
         Cube staticCube = new Cube(cube);
@@ -65,7 +82,7 @@ public class DepthFirstSearch {
 //        System.out.println("cube");
 //        bune.print();
 
-       // rotation.movesTranslate(randomScrambleMoves, tempCube);
+        // rotation.movesTranslate(randomScrambleMoves, tempCube);
         //tempCube.print();
 
 
@@ -147,6 +164,8 @@ public class DepthFirstSearch {
             solution = moves;
             solutionsSet.add(solution);
         }
+
+        return goalBoolean;
     }
 
     public List<String> shortestSolutions() {
@@ -158,8 +177,8 @@ public class DepthFirstSearch {
                 .findFirst()
                 .orElse(null);
 
-        for(String str : solutionList) {
-            if(str.length() == shortestSolution.length()) {
+        for (String str : solutionList) {
+            if (str.length() == shortestSolution.length()) {
                 shortestSolutionsList.add(str);
             }
         }
