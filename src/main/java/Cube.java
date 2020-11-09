@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 public class Cube {
     private char element[] = new char[54];
@@ -95,6 +96,15 @@ public class Cube {
         return solved;
     }
 
+    public boolean isEqual(Cube cube){
+        for (int i = 0; i < 54; i++) {
+            if (element[i] != cube.getElement(i)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void print() {
         System.out.println("         |" + "-------|");
         System.out.println(
@@ -126,4 +136,13 @@ public class Cube {
         System.out.println("         |" + "-------|\n");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return isEqual((Cube) o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(element);
+    }
 }
