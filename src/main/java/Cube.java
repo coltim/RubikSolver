@@ -1,6 +1,7 @@
+import java.util.Arrays;
 
 public class Cube {
-    private char element[] = new char[54];
+    private final char[] element = new char[54];
 
     public Cube() {
 
@@ -38,7 +39,7 @@ public class Cube {
         this.element[index] = element;
     }
 
-    public void set(char inputElement[]) {
+    public void set(char[] inputElement) {
         for (int i = 0; i < inputElement.length; i++) {
             element[i] = inputElement[i];
         }
@@ -57,42 +58,14 @@ public class Cube {
         return solved;
     }
 
-    boolean whiteCrossIsSolved(Cube cube) {
-        boolean solved = true;
-        char center = cube.getElement(40);
-        if (cube.getElement(37) != center ||
-                cube.getElement(39) != center ||
-                cube.getElement(41) != center ||
-                cube.getElement(43) != center) {
-            solved = false;
-        } else if (cube.getElement(1) != 'b' ||
-                cube.getElement(10) != 'o' ||
-                cube.getElement(19) != 'g' ||
-                cube.getElement(28) != 'r') {
-            solved = false;
-        }
-        return solved;
-    }
 
-    boolean firstLayerIsSolved(Cube cube) {
-        boolean solved = true;
-        char center = cube.getElement(40);
-        if (cube.getElement(36) != center ||
-                cube.getElement(38) != center ||
-                cube.getElement(42) != center ||
-                cube.getElement(44) != center) {
-            solved = false;
-        } else if (cube.getElement(0) != 'b' ||
-                cube.getElement(2) != 'b' ||
-                cube.getElement(9) != 'o' ||
-                cube.getElement(11) != 'o' ||
-                cube.getElement(18) != 'g' ||
-                cube.getElement(20) != 'g' ||
-                cube.getElement(27) != 'r' ||
-                cube.getElement(29) != 'r') {
-            solved = false;
+    public boolean isEqual(Cube cube){
+        for (int i = 0; i < 54; i++) {
+            if (element[i] != cube.getElement(i)){
+                return false;
+            }
         }
-        return solved;
+        return true;
     }
 
     public void print() {
@@ -126,4 +99,13 @@ public class Cube {
         System.out.println("         |" + "-------|\n");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return isEqual((Cube) o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(element);
+    }
 }

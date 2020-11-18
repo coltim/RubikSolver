@@ -4,7 +4,7 @@ public class Rotations {
 
 
     public void movesTranslate(String moves, Cube cube){
-        char movesArray[] = moves.toCharArray();
+        char[] movesArray = moves.toCharArray();
         for (char move : movesArray) {
             if (move == 'L') {
                 this.L(cube);
@@ -52,7 +52,6 @@ public class Rotations {
             }
             if (move == 'b') {
                 this.Breverse(cube);
-                continue;
             }
         }
     }
