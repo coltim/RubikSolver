@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class DepthFirstSearch {
 
@@ -11,12 +8,12 @@ public class DepthFirstSearch {
     Cube readyCube = new Cube();
     String goal;
     Goals goals = new Goals();
-    private int maxDepth = 8;
+    private final int maxDepth = 8;
     private String solution;
     String randomScrambleMoves;
     HashSet<String> solutionsSet = new HashSet<>();
     List<String> shortestSolutionsList = new ArrayList<>();
-    List<String> solvedF2l = new ArrayList<>();
+    List solvedF2l = new ArrayList<>();
     int count = 0;
     int count2 = 0;
 
@@ -40,91 +37,42 @@ public class DepthFirstSearch {
     public void search() {
         List<Cube> pathList = new ArrayList<>();
         pathList.add(cube);
-
         for (int i = 0; i <= maxDepth; i++) {
-            String temp = search(i, "", pathList);
-            if (temp != null) {
-                System.out.println("ez a temp--- " + temp + "  - " + i);
+            String solution = search(i, "", pathList);
+            if (solution != null) {
+                System.out.println("Legrövidebb megoldás: " + solution);
                 break;
             }
-
         }
-
     }
 
     private String search(int currentDepth, String moves, List<Cube> path) {
-
-
-
-        char possibleMoves[] = {'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'F', 'f', 'B', 'b'};
-        if (currentDepth > 0 ) {
+        char[] possibleMoves = {'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'F', 'f', 'B', 'b'};
+        if (currentDepth > 0) {
             for (char c : possibleMoves) {
-
                 String movesConcat = moves.concat(Character.toString(c));
-                Cube staticCube = new Cube(cube);
-                tempCube = staticCube;
+                tempCube = new Cube(cube);
                 rotation.movesTranslate(movesConcat, tempCube);
-                if (tempCube.isEqual(cube)) {
-                    count++;
-                    //System.out.println(count+"[----" + movesConcat);
-                }
-                String temp = null;
-                if (!path.contains(tempCube)){
+                String result = null;
+                if (!path.contains(tempCube)) {
                     path.add(tempCube);
-                    temp = search(currentDepth - 1, movesConcat, path);
-                    path.remove(path.size()-1);
+                    result = search(currentDepth - 1, movesConcat, path);
+                    path.remove(path.size() - 1);
                 }
-
-                /*if (!movesChecker(movesConcat)) {
-                    //System.out.println(movesConcat);
-                    temp = search(currentDepth - 1, movesConcat);
-                }*/
-
-                if (temp != null) {
-                    return temp;
+                if (result != null) {
+                    return result;
                 }
             }
         } else {
-           // System.out.println(moves + " letesztelt");
             if (testSolver(moves, goal)) {
-                System.out.println("belulrol jon " + moves);
-
                 return moves;
             } else {
-                //System.out.println("nincs megoldas");
                 return null;
             }
-
         }
-
         return null;
     }
 
-    public boolean movesChecker(String moves) {
-        Character c1;
-        Character c2;
-        boolean temp = false;
-        if (moves.length() > 1) {
-            for (int i = 0; i < moves.length() - 1; i++) {
-                c1 = moves.charAt(i);
-                c2 = Character.isUpperCase(moves.charAt(i + 1)) ? Character.toLowerCase(moves.charAt(i + 1)) : Character.toUpperCase(moves.charAt(i + 1));
-                if (c1 == c2) {
-                    //System.out.println("most-" + moves );
-                    temp = true;
-                }
-            }
-        }
-        if (moves.length() > 3) {
-            for (int i = 0; i < moves.length() - 3; i++) {
-                if (moves.charAt(i) == (moves.charAt(i + 1) & moves.charAt(i + 2) & moves.charAt(i + 3))) {
-                    temp = true;
-                }
-            }
-        }
-
-
-        return temp;
-    }
 
     public boolean testSolver(String moves, String goal) {
         //System.out.println("-------");
@@ -165,6 +113,18 @@ public class DepthFirstSearch {
             case "firstLayerCorner4":
                 goalBoolean = goals.firstLayerCorner4(tempCube);
                 break;
+            case "firstLayerCorner1GoalUpdate":
+                goalBoolean = goals.firstLayerCorner1GoalUpdate(tempCube, solvedF2l);
+                break;
+            case "firstLayerCorner2GoalUpdate":
+                goalBoolean = goals.firstLayerCorner2GoalUpdate(tempCube, solvedF2l);
+                break;
+            case "firstLayerCorner3GoalUpdate":
+                goalBoolean = goals.firstLayerCorner3GoalUpdate(tempCube, solvedF2l);
+                break;
+            case "firstLayerCorner4GoalUpdate":
+                goalBoolean = goals.firstLayerCorner4GoalUpdate(tempCube, solvedF2l);
+                break;
             case "secondLayerEdge1":
                 goalBoolean = goals.secondLayerEdge1(tempCube);
                 break;
@@ -176,6 +136,18 @@ public class DepthFirstSearch {
                 break;
             case "secondLayerEdge4":
                 goalBoolean = goals.secondLayerEdge4(tempCube);
+                break;
+            case "secondLayerEdge1GoalUpdate":
+                goalBoolean = goals.secondLayerEdge1GoalUpdate(tempCube, solvedF2l);
+                break;
+            case "secondLayerEdge2GoalUpdate":
+                goalBoolean = goals.secondLayerEdge2GoalUpdate(tempCube, solvedF2l);
+                break;
+            case "secondLayerEdge3GoalUpdate":
+                goalBoolean = goals.secondLayerEdge3GoalUpdate(tempCube, solvedF2l);
+                break;
+            case "secondLayerEdge4GoalUpdate":
+                goalBoolean = goals.secondLayerEdge4GoalUpdate(tempCube, solvedF2l);
                 break;
             case "f2l1":
                 goalBoolean = goals.f2l1(tempCube);
@@ -191,9 +163,6 @@ public class DepthFirstSearch {
                 break;
             case "firstLayer":
                 goalBoolean = goals.firstLayer(tempCube);
-                break;
-            case "f2l":
-                goalBoolean = goals.f2l(tempCube, solvedF2l);
                 break;
             case "f2l1GoalUpdate":
                 goalBoolean = goals.f2l1GoalUpdate(tempCube, solvedF2l);
@@ -224,18 +193,29 @@ public class DepthFirstSearch {
 
     public List<String> shortestSolutions() {
         String shortest = "";
+
+        String shortestSolution;
         List<String> solutionList = new ArrayList<String>(solutionsSet);
-        //System.out.println(solutionList);
-        String shortestSolution = solutionList.stream()
-                .sorted(Comparator.comparingInt(String::length))
+
+        shortestSolution = solutionList.stream()
+                .sorted((s1, s2) -> s1.length() - s2.length())
                 .findFirst()
                 .orElse(null);
 
-        for (String str : solutionList) {
-            if (str.length() == shortestSolution.length()) {
-                shortestSolutionsList.add(str);
+
+
+//        for (String str : solutionList) {
+//            if (str.length() == shortestSolution.length()) {
+//                shortestSolutionsList.add(str);
+//            }
+//        }
+
+        solutionList.forEach((n) -> {
+            if (shortestSolution != null && n.length() == shortestSolution.length()) {
+                shortestSolutionsList.add(n);
             }
-        }
+        });
+
         return shortestSolutionsList;
     }
 
