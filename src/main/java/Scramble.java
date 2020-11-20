@@ -74,65 +74,11 @@ public class Scramble {
                     randomMoves = randomMoves.concat("b");
                 }
 
-
-            /*switch (selectedRotation) {
-                case 1:
-                    rotation.B(cube);
-                    System.out.print("B");
-                    break;
-                case 2:
-                    rotation.Breverse(cube);
-                    System.out.print("b");
-                    break;
-                case 3:
-                    rotation.D(cube);
-                    System.out.print("D");
-                    break;
-                case 4:
-                    rotation.Dreverse(cube);
-                    System.out.print("d");
-                    break;
-                case 5:
-                    rotation.F(cube);
-                    System.out.print("F");
-                    break;
-                case 6:
-                    rotation.Freverse(cube);
-                    System.out.print("f");
-                    break;
-                case 7:
-                    rotation.L(cube);
-                    System.out.print("L");
-                    break;
-                case 8:
-                    rotation.Lreverse(cube);
-                    System.out.print("l");
-                    break;
-                case 9:
-                    rotation.R(cube);
-                    System.out.print("R");
-                    break;
-                case 10:
-                    rotation.Rreverse(cube);
-                    System.out.print("r");
-                    break;
-                case 11:
-                    rotation.U(cube);
-                    System.out.print("U");
-                    break;
-                case 12:
-                    rotation.Ureverse(cube);
-                    System.out.print("u");
-                    break;
-
-            }*/
-
             }
         } while (scrambleChecker(randomMoves));
 
 
         System.out.println("keverés: " + randomMoves);
-        System.out.println(count);
 
     }
 

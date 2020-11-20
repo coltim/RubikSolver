@@ -10,17 +10,16 @@ public class Solver {
 
     public void solver(int scrambleNumber, String method) {
         Cube cube = new Cube();
-        Goals goals = new Goals();
         cube.print();
         Scramble scramble = new Scramble(scrambleNumber, cube);
         scramble.getRandomMoves();
         cube.print();
 
         switch(method) {
-            case "layerByLayer":
+            case "LayerByLayer":
                 layerByLayer(cube);
                 break;
-            case "first2Layer":
+            case "First2Layer":
                 first2Layer(cube);
                 break;
         }
@@ -29,154 +28,103 @@ public class Solver {
 
     public void layerByLayer(Cube cube){
         Goals goals = new Goals();
+        System.out.println("-------White Cross");
         goalSolver(cube, "whiteCross");
+        cube.print();
         while (!goals.firstLayer(cube)){
+            System.out.println("-------First Layer Corner");
             goalSolver(cube, shortestFirstLayerCorner(cube).get(1), readyfirstLayerCorner(cube));
             cube.print();
-            System.out.println("-------************************************************************");
-            System.out.println(readyfirstLayerCorner(cube));
         }
 
         while (!goals.secondLayer(cube)){
+            System.out.println("-------Second Layer Edge");
             goalSolver(cube, shortestSecondLayerEdge(cube).get(1), readySecondLayerEdge(cube));
             cube.print();
-            System.out.println("-------************************************************************");
-            System.out.println(readySecondLayerEdge(cube));
         }
     }
 
     public void first2Layer(Cube cube){
         Goals goals = new Goals();
+        System.out.println("-------White Cross");
         goalSolver(cube, "whiteCross");
+        cube.print();
         while (!goals.secondLayer(cube)){
+            System.out.println("-------F2L");
             goalSolver(cube, shortestF2l(cube).get(1), readyF2l(cube));
             cube.print();
-            System.out.println("-------************************************************************");
-            System.out.println(readyF2l(cube));
         }
     }
 
     public void goalSolver(Cube cube, String goal) {
 
-        List<String> shortestSolutionsList;
         Rotations rotation = new Rotations();
         DepthFirstSearch dfs;
-        System.out.println("-------1");
 
         dfs = new DepthFirstSearch("", cube, goal);
         dfs.search();
 
-        System.out.println("Legrovidebb megoldasok, " + goal + dfs.shortestSolutions());
-
-        shortestSolutionsList = dfs.shortestSolutions();
-        String firstLayer = shortestSolutionsList.get(0);
-
-        rotation.movesTranslate(firstLayer, cube);
-        cube.print();
+        if (dfs.getSolution() != null){
+            rotation.movesTranslate(dfs.getSolution(), cube);
+        } else {
+            System.out.println("Ebben a mélységben nincs megoldás");
+            System.exit(0);
+        }
 
         System.out.println("-------");
     }
     public void goalSolver(Cube cube, String goal, List solvedGoals) {
 
-        List<String> shortestSolutionsList = new ArrayList<>();
         Rotations rotation = new Rotations();
-        DepthFirstSearch dfs;
-        System.out.println("-------");
-
-        /*dfs = new DepthFirstSearch("", cube, goal, solvedGoals);
-        dfs.search();
-
-        System.out.println("Legrovidebb megoldasok, " + goal + dfs.shortestSolutions());
-
-        shortestSolutionsList = dfs.shortestSolutions();
-        String firstLayer = shortestSolutionsList.get(0);*/
 
         rotation.movesTranslate(goal, cube);
-        cube.print();
 
         System.out.println("-------");
-    }
-
-    public int goalTester(Cube cube, String goal) {
-
-        List<String> shortestSolutionsList = new ArrayList<>();
-        Rotations rotation = new Rotations();
-        DepthFirstSearch dfs;
-        int shortestSol = 0;
-        System.out.println("-------");
-
-        dfs = new DepthFirstSearch("", cube, goal);
-        dfs.search();
-
-        System.out.println("Legrovidebb megoldasok, " + goal + dfs.shortestSolutions());
-
-        if (!dfs.shortestSolutions().isEmpty()) {
-            shortestSol = dfs.shortestSolutions().get(0).length();
-        }
-        System.out.println("-------");
-        return shortestSol;
-
-
     }
 
     //megnezi melyik blokk van mar kesz.
     public List<String> readyF2l(Cube cube) {
-        Goals goal = new Goals();
         List<String> solvedGoals = new ArrayList();
         String[] goals = {"f2l1", "f2l2", "f2l3", "f2l4"};
         for (String temp : goals) {
-            //System.out.println(f2lSelecter(temp, cube));
             if (!f2lSelecter(temp, cube).isEmpty())
                 solvedGoals.add(f2lSelecter(temp, cube).get(0).toString());
-
         }
-
-        //System.out.println("solvedgoals--" + solvedGoals);
         return solvedGoals;
     }
 
     public List<String> readyfirstLayerCorner(Cube cube) {
-        Goals goal = new Goals();
         List<String> solvedGoals = new ArrayList();
         String[] goals = {"firstLayerCorner1", "firstLayerCorner2", "firstLayerCorner3", "firstLayerCorner4"};
         for (String temp : goals) {
-            //System.out.println(f2lSelecter(temp, cube));
             if (!firstLayerCornerSelecter(temp, cube).isEmpty())
                 solvedGoals.add(firstLayerCornerSelecter(temp, cube).get(0).toString());
-
         }
-
-        //System.out.println("solvedgoals--" + solvedGoals);
         return solvedGoals;
     }
 
     public List<String> readySecondLayerEdge(Cube cube) {
-        Goals goal = new Goals();
         List<String> solvedGoals = new ArrayList();
         String[] goals = {"secondLayerEdge1", "secondLayerEdge2", "secondLayerEdge3", "secondLayerEdge4"};
         for (String temp : goals) {
-            //System.out.println(f2lSelecter(temp, cube));
             if (!secondLayerEdgeSelecter(temp, cube).isEmpty())
                 solvedGoals.add(secondLayerEdgeSelecter(temp, cube).get(0).toString());
 
         }
-
-        //System.out.println("solvedgoals--" + solvedGoals);
         return solvedGoals;
     }
 
 
     public List<String> shortestF2l(Cube cube) {
 
-        List<String> shortestSolutionsList = new ArrayList<>();
-        Rotations rotation = new Rotations();
         DepthFirstSearch dfs;
         System.out.println("-------");
         String shortestGoal = null;
         Cube tempCube;
         Cube staticCube = new Cube(cube);
         tempCube = staticCube;
-        Goals goal = new Goals();
+        int index = 1;
+        String solution;
         List<String> readyList = new ArrayList();
         List<String> goalAndSolutionList = new ArrayList();
         String[] goals = {"f2l1GoalUpdate", "f2l2GoalUpdate", "f2l3GoalUpdate", "f2l4GoalUpdate"};
@@ -184,50 +132,51 @@ public class Solver {
         for (String temp : goals) {
             dfs = new DepthFirstSearch("", tempCube, temp, readyF2l(cube));
             dfs.search();
+            if (dfs.getSolution() == null){
+                solution = "Ebben a mélységben nincs megoldás";
+            }else {
+                solution = dfs.getSolution() != "" ? dfs.getSolution() : "Kész";
+            }
+
+            System.out.println(index + ". F2L legrövidebb megoldás: " + solution);
+
             if (!dfs.shortestSolutions().isEmpty()) {
                 if (dfs.shortestSolutions().get(0) != "") {
                     if (readyList.isEmpty()) {
                         readyList.add(dfs.shortestSolutions().get(0));
                         shortestGoal = temp;
                     }
-                    //System.out.println("1   " + readyList + "   " + readyList.isEmpty());
-                    //System.out.println("1-   " + dfs.shortestSolutions());
                     if (!readyList.isEmpty() && !dfs.shortestSolutions().isEmpty() &&
                             readyList.get(0).length() > dfs.shortestSolutions().get(0).length()) {
-                        //System.out.println("2   " + readyList);
-                        //System.out.println("3   " + dfs.shortestSolutions());
                         readyList.clear();
                         readyList.add(dfs.shortestSolutions().get(0));
                         shortestGoal = temp;
                     }
                 }
             }
+            index++;
         }
-        System.out.println("ez a lista" + readyList);
-        System.out.println(shortestGoal);
         goalAndSolutionList.add(shortestGoal);
-        goalAndSolutionList.add(readyList.get(0));
-        //tempCube.print();
-
-        //System.out.println("Legrovidebb megoldasok, " +  + dfs.shortestSolutions());
-
-        // shortestSolutionsList = dfs.shortestSolutions();
-        //String firstLayer = shortestSolutionsList.get(0);
+        if (!readyList.isEmpty()){
+            System.out.println("Használt algoritmus: " + readyList.get(0));
+            goalAndSolutionList.add(readyList.get(0));
+        } else {
+            System.exit(0);
+        }
 
         return goalAndSolutionList;
     }
 
     public List<String> shortestFirstLayerCorner(Cube cube) {
 
-        List<String> shortestSolutionsList = new ArrayList<>();
-        Rotations rotation = new Rotations();
         DepthFirstSearch dfs;
         System.out.println("-------");
         String shortestGoal = null;
         Cube tempCube;
         Cube staticCube = new Cube(cube);
         tempCube = staticCube;
-        Goals goal = new Goals();
+        int index = 1;
+        String solution;
         List<String> readyList = new ArrayList();
         List<String> goalAndSolutionList = new ArrayList();
         String[] goals = {"firstLayerCorner1GoalUpdate",
@@ -238,50 +187,51 @@ public class Solver {
         for (String temp : goals) {
             dfs = new DepthFirstSearch("", tempCube, temp, readyfirstLayerCorner(cube));
             dfs.search();
-            if (!dfs.shortestSolutions().isEmpty()) {
-                if (dfs.shortestSolutions().get(0) != "") {
+            if (dfs.getSolution() == null){
+                solution = "Ebben a mélységben nincs megoldás";
+            }else {
+                solution = dfs.getSolution() != "" ? dfs.getSolution() : "Kész";
+            }
+            System.out.println(index + ". sarok legrövidebb megoldás: " + solution);
+
+            if (dfs.getSolution() != null) {
+                if (dfs.getSolution()!= "") {
                     if (readyList.isEmpty()) {
-                        readyList.add(dfs.shortestSolutions().get(0));
+                        readyList.add(dfs.getSolution());
                         shortestGoal = temp;
                     }
-                    //System.out.println("1   " + readyList + "   " + readyList.isEmpty());
-                    //System.out.println("1-   " + dfs.shortestSolutions());
-                    if (!readyList.isEmpty() && !dfs.shortestSolutions().isEmpty() &&
-                            readyList.get(0).length() > dfs.shortestSolutions().get(0).length()) {
-                        //System.out.println("2   " + readyList);
-                        //System.out.println("3   " + dfs.shortestSolutions());
+                    if (!readyList.isEmpty() && dfs.getSolution() != null &&
+                            readyList.get(0).length() > dfs.getSolution().length()) {
                         readyList.clear();
-                        readyList.add(dfs.shortestSolutions().get(0));
+                        readyList.add(dfs.getSolution());
                         shortestGoal = temp;
                     }
                 }
             }
+            index++;
         }
-        System.out.println("ez a lista" + readyList);
-        System.out.println(shortestGoal);
+
         goalAndSolutionList.add(shortestGoal);
-        goalAndSolutionList.add(readyList.get(0));
-        //tempCube.print();
-
-        //System.out.println("Legrovidebb megoldasok, " +  + dfs.shortestSolutions());
-
-        // shortestSolutionsList = dfs.shortestSolutions();
-        //String firstLayer = shortestSolutionsList.get(0);
+        if (!readyList.isEmpty()){
+            System.out.println("Használt algoritmus: " + readyList.get(0));
+            goalAndSolutionList.add(readyList.get(0));
+        } else {
+            System.exit(0);
+        }
 
         return goalAndSolutionList;
     }
 
     public List<String> shortestSecondLayerEdge(Cube cube) {
 
-        List<String> shortestSolutionsList = new ArrayList<>();
-        Rotations rotation = new Rotations();
         DepthFirstSearch dfs;
         System.out.println("-------");
         String shortestGoal = null;
         Cube tempCube;
         Cube staticCube = new Cube(cube);
         tempCube = staticCube;
-        Goals goal = new Goals();
+        int index = 1;
+        String solution;
         List<String> readyList = new ArrayList();
         List<String> goalAndSolutionList = new ArrayList();
         String[] goals = {"secondLayerEdge1GoalUpdate",
@@ -292,68 +242,60 @@ public class Solver {
         for (String temp : goals) {
             dfs = new DepthFirstSearch("", tempCube, temp, readySecondLayerEdge(cube));
             dfs.search();
+            if (dfs.getSolution() == null){
+                solution = "Ebben a mélységben nincs megoldás";
+            }else {
+                solution = dfs.getSolution() != "" ? dfs.getSolution() : "Kész";
+            }
+            System.out.println(index + ". él legrövidebb megoldás: " + solution);
+
             if (!dfs.shortestSolutions().isEmpty()) {
                 if (dfs.shortestSolutions().get(0) != "") {
                     if (readyList.isEmpty()) {
                         readyList.add(dfs.shortestSolutions().get(0));
                         shortestGoal = temp;
                     }
-                    //System.out.println("1   " + readyList + "   " + readyList.isEmpty());
-                    //System.out.println("1-   " + dfs.shortestSolutions());
                     if (!readyList.isEmpty() && !dfs.shortestSolutions().isEmpty() &&
                             readyList.get(0).length() > dfs.shortestSolutions().get(0).length()) {
-                        //System.out.println("2   " + readyList);
-                        //System.out.println("3   " + dfs.shortestSolutions());
                         readyList.clear();
                         readyList.add(dfs.shortestSolutions().get(0));
                         shortestGoal = temp;
                     }
                 }
             }
+            index++;
         }
-        System.out.println("ez a lista" + readyList);
-        System.out.println(shortestGoal);
         goalAndSolutionList.add(shortestGoal);
-        goalAndSolutionList.add(readyList.get(0));
-        //tempCube.print();
-
-        //System.out.println("Legrovidebb megoldasok, " +  + dfs.shortestSolutions());
-
-        // shortestSolutionsList = dfs.shortestSolutions();
-        //String firstLayer = shortestSolutionsList.get(0);
+        if (!readyList.isEmpty()){
+            System.out.println("Használt algoritmus: " + readyList.get(0));
+            goalAndSolutionList.add(readyList.get(0));
+        } else {
+            System.exit(0);
+        }
 
         return goalAndSolutionList;
     }
 
     public List f2lSelecter(String goal, Cube cube) {
         Goals goal1 = new Goals();
-        boolean isReady;
-        String readyF2l = "nincs";
         List readyList = new ArrayList();
         switch (goal) {
             case "f2l1":
-                isReady = goal1.f2l1(cube);
-                if (isReady)
+                if (goal1.f2l1(cube))
                     readyList.add("f2l1");
                 break;
             case "f2l2":
-                isReady = goal1.f2l2(cube);
-                if (isReady)
+                if (goal1.f2l2(cube))
                     readyList.add("f2l2");
                 break;
             case "f2l3":
-                isReady = goal1.f2l3(cube);
-                if (isReady)
+                if (goal1.f2l3(cube))
                     readyList.add("f2l3");
                 break;
             case "f2l4":
-                isReady = goal1.f2l4(cube);
-                if (isReady)
+                if (goal1.f2l4(cube))
                     readyList.add("f2l4");
                 break;
-            default:
-                isReady = false;
-                readyF2l = "nincs";
         }
         return readyList;
 
@@ -361,33 +303,24 @@ public class Solver {
 
     public List firstLayerCornerSelecter(String goal, Cube cube) {
         Goals goal1 = new Goals();
-        boolean isReady;
-        String readyirstLayerCorner = "nincs";
         List readyList = new ArrayList();
         switch (goal) {
             case "firstLayerCorner1":
-                isReady = goal1.firstLayerCorner1(cube);
-                if (isReady)
+                if (goal1.firstLayerCorner1(cube))
                     readyList.add("firstLayerCorner1");
                 break;
             case "firstLayerCorner2":
-                isReady = goal1.firstLayerCorner2(cube);
-                if (isReady)
+                if (goal1.firstLayerCorner2(cube))
                     readyList.add("firstLayerCorner2");
                 break;
             case "firstLayerCorner3":
-                isReady = goal1.firstLayerCorner3(cube);
-                if (isReady)
+                if (goal1.firstLayerCorner3(cube))
                     readyList.add("firstLayerCorner3");
                 break;
             case "firstLayerCorner4":
-                isReady = goal1.firstLayerCorner4(cube);
-                if (isReady)
+                if (goal1.firstLayerCorner4(cube))
                     readyList.add("firstLayerCorner4");
                 break;
-            default:
-                isReady = false;
-                readyirstLayerCorner = "nincs";
         }
         return readyList;
 
@@ -395,33 +328,24 @@ public class Solver {
 
     public List secondLayerEdgeSelecter(String goal, Cube cube) {
         Goals goal1 = new Goals();
-        boolean isReady;
-        String readyirstLayerCorner = "nincs";
         List readyList = new ArrayList();
         switch (goal) {
             case "secondLayerEdge1":
-                isReady = goal1.secondLayerEdge1(cube);
-                if (isReady)
+                if (goal1.secondLayerEdge1(cube))
                     readyList.add("secondLayerEdge1");
                 break;
             case "secondLayerEdge2":
-                isReady = goal1.secondLayerEdge2(cube);
-                if (isReady)
+                if (goal1.secondLayerEdge2(cube))
                     readyList.add("secondLayerEdge2");
                 break;
             case "secondLayerEdge3":
-                isReady = goal1.secondLayerEdge3(cube);
-                if (isReady)
+                if (goal1.secondLayerEdge3(cube))
                     readyList.add("secondLayerEdge3");
                 break;
             case "secondLayerEdge4":
-                isReady = goal1.secondLayerEdge4(cube);
-                if (isReady)
+                if (goal1.secondLayerEdge4(cube))
                     readyList.add("secondLayerEdge4");
                 break;
-            default:
-                isReady = false;
-                readyirstLayerCorner = "nincs";
         }
         return readyList;
 

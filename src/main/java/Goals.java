@@ -321,48 +321,6 @@ public class Goals {
         return solved;
     }
 
-    boolean f2l(Cube cube, List<String> solvedF2lList) {
-
-
-        if (f2l1(cube)){
-            f2l1(cube);
-            if (f2l2(cube)){
-                f2l2(cube);
-                if (f2l3(cube)){
-                    f2l3(cube);
-                    if (f2l4(cube)){
-                        f2l4(cube);
-
-                    }
-                }
-            }
-        }
-
-        solved = true;
-        boolean fullsolveed;
-        boolean f2l1;
-        boolean f2l2;
-        boolean f2l3;
-        boolean f2l4;
-        //
-        // while(fullsolveed == false){}
-        for (String temp : solvedF2lList) {
-            if (temp.equals("f2l1")) {
-                f2l1 = f2l1(cube);
-            } else if (temp.equals("f2l2")) {
-                f2l2 = f2l2(cube);
-            } else if (temp.equals("f2l3")) {
-                f2l3 = f2l3(cube);
-            } else if (temp.equals("f2l4")) {
-                f2l4 = f2l4(cube);
-            }
-
-        }
-        //
-        return solved;
-
-    }
-
     boolean f2l1(Cube cube) {
         solved = true;
         if (!whiteCrossIsSolved(cube) || cube.getElement(36) != 'w' ||
@@ -505,25 +463,4 @@ public class Goals {
         return solved;
     }
 
-
-    boolean firstLayerIsSolved(Cube cube) {
-        solved = true;
-        //boolean solved = true;
-        char center = cube.getElement(40);
-        if (cube.getElement(36) != center ||
-                cube.getElement(38) != center ||
-                cube.getElement(42) != center ||
-                cube.getElement(44) != center ||
-                cube.getElement(0) != 'b' ||
-                cube.getElement(2) != 'b' ||
-                cube.getElement(9) != 'o' ||
-                cube.getElement(11) != 'o' ||
-                cube.getElement(18) != 'g' ||
-                cube.getElement(20) != 'g' ||
-                cube.getElement(27) != 'r' ||
-                cube.getElement(29) != 'r') {
-            solved = false;
-        }
-        return solved;
-    }
 }

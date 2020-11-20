@@ -8,7 +8,7 @@ public class DepthFirstSearch {
     Cube readyCube = new Cube();
     String goal;
     Goals goals = new Goals();
-    private final int maxDepth = 8;
+    private final int maxDepth = 7;
     private String solution;
     String randomScrambleMoves;
     HashSet<String> solutionsSet = new HashSet<>();
@@ -38,9 +38,9 @@ public class DepthFirstSearch {
         List<Cube> pathList = new ArrayList<>();
         pathList.add(cube);
         for (int i = 0; i <= maxDepth; i++) {
-            String solution = search(i, "", pathList);
+            solution = search(i, "", pathList);
             if (solution != null) {
-                System.out.println("Legrövidebb megoldás: " + solution);
+                //System.out.println("Legrövidebb megoldás: " + solution);
                 break;
             }
         }
@@ -75,27 +75,11 @@ public class DepthFirstSearch {
 
 
     public boolean testSolver(String moves, String goal) {
-        //System.out.println("-------");
-        //System.out.println(moves);
+        boolean goalBoolean;
         Cube staticCube = new Cube(cube);
         tempCube = staticCube;
-//        System.out.println("tempcube");
-//        tempCube.print();
-//        System.out.println("cube");
-//        bune.print();
-
-        // rotation.movesTranslate(randomScrambleMoves, tempCube);
-        //tempCube.print();
-
 
         rotation.movesTranslate(moves, tempCube);
-        //tempCube.print();
-        /*System.out.println("lepes" + moves);
-        tempCube.print();
-        cube.print();*/
-        //System.out.println("-------");
-
-        boolean goalBoolean;
 
         switch (goal) {
             case "whiteCross":
@@ -191,6 +175,10 @@ public class DepthFirstSearch {
         return goalBoolean;
     }
 
+    public String getSolution() {
+        return solution;
+    }
+
     public List<String> shortestSolutions() {
         String shortest = "";
 
@@ -198,17 +186,10 @@ public class DepthFirstSearch {
         List<String> solutionList = new ArrayList<String>(solutionsSet);
 
         shortestSolution = solutionList.stream()
-                .sorted((s1, s2) -> s1.length() - s2.length())
+                .sorted(Comparator.comparingInt(String::length))
                 .findFirst()
                 .orElse(null);
 
-
-
-//        for (String str : solutionList) {
-//            if (str.length() == shortestSolution.length()) {
-//                shortestSolutionsList.add(str);
-//            }
-//        }
 
         solutionList.forEach((n) -> {
             if (shortestSolution != null && n.length() == shortestSolution.length()) {
