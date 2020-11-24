@@ -1,5 +1,3 @@
-import jdk.nashorn.internal.ir.IfNode;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,13 +57,13 @@ public class Solver {
     public void goalSolver(Cube cube, String goal) {
 
         Rotations rotation = new Rotations();
-        DepthFirstSearch dfs;
+        IterativeBreadthFirstSearch ibfs;
 
-        dfs = new DepthFirstSearch("", cube, goal);
-        dfs.search();
+        ibfs = new IterativeBreadthFirstSearch("", cube, goal);
+        ibfs.search();
 
-        if (dfs.getSolution() != null){
-            rotation.movesTranslate(dfs.getSolution(), cube);
+        if (ibfs.getSolution() != null){
+            rotation.movesTranslate(ibfs.getSolution(), cube);
         } else {
             System.out.println("Ebben a mélységben nincs megoldás");
             System.exit(0);
@@ -117,7 +115,7 @@ public class Solver {
 
     public List<String> shortestF2l(Cube cube) {
 
-        DepthFirstSearch dfs;
+        IterativeBreadthFirstSearch ibfs;
         System.out.println("-------");
         String shortestGoal = null;
         Cube tempCube;
@@ -130,26 +128,26 @@ public class Solver {
         String[] goals = {"f2l1GoalUpdate", "f2l2GoalUpdate", "f2l3GoalUpdate", "f2l4GoalUpdate"};
 
         for (String temp : goals) {
-            dfs = new DepthFirstSearch("", tempCube, temp, readyF2l(cube));
-            dfs.search();
-            if (dfs.getSolution() == null){
+            ibfs = new IterativeBreadthFirstSearch("", tempCube, temp, readyF2l(cube));
+            ibfs.search();
+            if (ibfs.getSolution() == null){
                 solution = "Ebben a mélységben nincs megoldás";
             }else {
-                solution = dfs.getSolution() != "" ? dfs.getSolution() : "Kész";
+                solution = ibfs.getSolution() != "" ? ibfs.getSolution() : "Kész";
             }
 
             System.out.println(index + ". F2L legrövidebb megoldás: " + solution);
 
-            if (!dfs.shortestSolutions().isEmpty()) {
-                if (dfs.shortestSolutions().get(0) != "") {
+            if (!ibfs.shortestSolutions().isEmpty()) {
+                if (ibfs.shortestSolutions().get(0) != "") {
                     if (readyList.isEmpty()) {
-                        readyList.add(dfs.shortestSolutions().get(0));
+                        readyList.add(ibfs.shortestSolutions().get(0));
                         shortestGoal = temp;
                     }
-                    if (!readyList.isEmpty() && !dfs.shortestSolutions().isEmpty() &&
-                            readyList.get(0).length() > dfs.shortestSolutions().get(0).length()) {
+                    if (!readyList.isEmpty() && !ibfs.shortestSolutions().isEmpty() &&
+                            readyList.get(0).length() > ibfs.shortestSolutions().get(0).length()) {
                         readyList.clear();
-                        readyList.add(dfs.shortestSolutions().get(0));
+                        readyList.add(ibfs.shortestSolutions().get(0));
                         shortestGoal = temp;
                     }
                 }
@@ -169,7 +167,7 @@ public class Solver {
 
     public List<String> shortestFirstLayerCorner(Cube cube) {
 
-        DepthFirstSearch dfs;
+        IterativeBreadthFirstSearch ibfs;
         System.out.println("-------");
         String shortestGoal = null;
         Cube tempCube;
@@ -185,25 +183,25 @@ public class Solver {
                 "firstLayerCorner4GoalUpdate"};
 
         for (String temp : goals) {
-            dfs = new DepthFirstSearch("", tempCube, temp, readyfirstLayerCorner(cube));
-            dfs.search();
-            if (dfs.getSolution() == null){
+            ibfs = new IterativeBreadthFirstSearch("", tempCube, temp, readyfirstLayerCorner(cube));
+            ibfs.search();
+            if (ibfs.getSolution() == null){
                 solution = "Ebben a mélységben nincs megoldás";
             }else {
-                solution = dfs.getSolution() != "" ? dfs.getSolution() : "Kész";
+                solution = ibfs.getSolution() != "" ? ibfs.getSolution() : "Kész";
             }
             System.out.println(index + ". sarok legrövidebb megoldás: " + solution);
 
-            if (dfs.getSolution() != null) {
-                if (dfs.getSolution()!= "") {
+            if (ibfs.getSolution() != null) {
+                if (ibfs.getSolution()!= "") {
                     if (readyList.isEmpty()) {
-                        readyList.add(dfs.getSolution());
+                        readyList.add(ibfs.getSolution());
                         shortestGoal = temp;
                     }
-                    if (!readyList.isEmpty() && dfs.getSolution() != null &&
-                            readyList.get(0).length() > dfs.getSolution().length()) {
+                    if (!readyList.isEmpty() && ibfs.getSolution() != null &&
+                            readyList.get(0).length() > ibfs.getSolution().length()) {
                         readyList.clear();
-                        readyList.add(dfs.getSolution());
+                        readyList.add(ibfs.getSolution());
                         shortestGoal = temp;
                     }
                 }
@@ -224,7 +222,7 @@ public class Solver {
 
     public List<String> shortestSecondLayerEdge(Cube cube) {
 
-        DepthFirstSearch dfs;
+        IterativeBreadthFirstSearch ibfs;
         System.out.println("-------");
         String shortestGoal = null;
         Cube tempCube;
@@ -240,25 +238,25 @@ public class Solver {
                 "secondLayerEdge4GoalUpdate"};
 
         for (String temp : goals) {
-            dfs = new DepthFirstSearch("", tempCube, temp, readySecondLayerEdge(cube));
-            dfs.search();
-            if (dfs.getSolution() == null){
+            ibfs = new IterativeBreadthFirstSearch("", tempCube, temp, readySecondLayerEdge(cube));
+            ibfs.search();
+            if (ibfs.getSolution() == null){
                 solution = "Ebben a mélységben nincs megoldás";
             }else {
-                solution = dfs.getSolution() != "" ? dfs.getSolution() : "Kész";
+                solution = ibfs.getSolution() != "" ? ibfs.getSolution() : "Kész";
             }
             System.out.println(index + ". él legrövidebb megoldás: " + solution);
 
-            if (!dfs.shortestSolutions().isEmpty()) {
-                if (dfs.shortestSolutions().get(0) != "") {
+            if (!ibfs.shortestSolutions().isEmpty()) {
+                if (ibfs.shortestSolutions().get(0) != "") {
                     if (readyList.isEmpty()) {
-                        readyList.add(dfs.shortestSolutions().get(0));
+                        readyList.add(ibfs.shortestSolutions().get(0));
                         shortestGoal = temp;
                     }
-                    if (!readyList.isEmpty() && !dfs.shortestSolutions().isEmpty() &&
-                            readyList.get(0).length() > dfs.shortestSolutions().get(0).length()) {
+                    if (!readyList.isEmpty() && !ibfs.shortestSolutions().isEmpty() &&
+                            readyList.get(0).length() > ibfs.shortestSolutions().get(0).length()) {
                         readyList.clear();
-                        readyList.add(dfs.shortestSolutions().get(0));
+                        readyList.add(ibfs.shortestSolutions().get(0));
                         shortestGoal = temp;
                     }
                 }

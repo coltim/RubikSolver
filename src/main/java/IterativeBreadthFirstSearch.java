@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class DepthFirstSearch {
+public class IterativeBreadthFirstSearch {
 
     Rotations rotation = new Rotations();
     Cube cube = new Cube();
@@ -18,14 +18,14 @@ public class DepthFirstSearch {
     int count2 = 0;
 
 
-    public DepthFirstSearch(String randomScrambleMoves, Cube cube, String goal) {
+    public IterativeBreadthFirstSearch(String randomScrambleMoves, Cube cube, String goal) {
         this.randomScrambleMoves = randomScrambleMoves;
         this.solution = "None";
         this.cube = cube;
         this.goal = goal;
     }
 
-    public DepthFirstSearch(String randomScrambleMoves, Cube cube, String goal, List solvedF2l) {
+    public IterativeBreadthFirstSearch(String randomScrambleMoves, Cube cube, String goal, List solvedF2l) {
         this.randomScrambleMoves = randomScrambleMoves;
         this.solution = "None";
         this.cube = cube;
